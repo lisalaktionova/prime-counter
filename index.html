@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prime Counter</title>
+</head>
+<body>
+    <h4>laktionovaea</h4>
+    <div id="result">Ожидание числа N...</div>
+
+    <script>
+        // Устанавливаем логин
+        document.querySelector('h4').textContent = 'laktionovaea';
+        
+        // Функция для проверки, является ли число простым
+        function isPrime(num) {
+            if (num < 2) return false;
+            if (num === 2) return true;
+            if (num % 2 === 0) return false;
+            
+            const limit = Math.sqrt(num);
+            for (let i = 3; i <= limit; i += 2) {
+                if (num % i === 0) return false;
+            }
+            return true;
+        }
+        
+        // Функция для подсчета простых чисел от 2 до N
+        function countPrimesUpTo(N) {
+            let count = 0;
+            for (let i = 2; i <= N; i++) {
+                if (isPrime(i)) {
+                    count++;
+                }
+            }
+            return count;
+        }
+        
+        // Получаем текущий URL
+        const currentUrl = window.location.href;
+        
+        // Находим позицию последнего вопросительного знака
+        const lastQuestionMark = currentUrl.lastIndexOf('?');
+        
+        if (lastQuestionMark !== -1) {
+            // Извлекаем число после ?
+            const numberStr = currentUrl.substring(lastQuestionMark + 1);
+            const N = parseInt(numberStr, 10);
+            
+            if (!isNaN(N) && N >= 2) {
+                // Подсчитываем простые числа
+                const primeCount = countPrimesUpTo(N);
+                
+                // Устанавливаем заголовок окна
+                document.title = primeCount.toString();
+                
+                // Показываем результат на странице
+                document.getElementById('result').innerHTML = 
+                    `Число N = ${N}<br>` +
+                    `Простых чисел в диапазоне [2, ${N}]: <strong>${primeCount}</strong><br>` +
+                    `(Заголовок окна установлен в: "${primeCount}")`;
+                    
+            } else if (!isNaN(N) && N < 2) {
+                document.title = '0';
+                document.getElementById('result').textContent = 
+                    `N = ${N} < 2. Простых чисел: 0`;
+            } else {
+                document.title = 'Ошибка';
+                document.getElementById('result').textContent = 
+                    'Ошибка: после ? должно быть целое число';
+            }
+        } else {
+            document.title = 'Введите число';
+            document.getElementById('result').innerHTML = 
+                'Добавьте число N в URL после знака ?<br>' +
+                'Пример: ?20 (посчитает простые числа от 2 до 20)<br>' +
+                'Примеры тестов:<br>' +
+                '?10 → 4 простых числа (2,3,5,7)<br>' +
+                '?20 → 8 простых чисел (2,3,5,7,11,13,17,19)<br>' +
+                '?100 → 25 простых чисел';
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        h4 {
+            color: #2c3e50;
+            border-bottom: 2px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+        #result {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+        .info {
+            margin-top: 30px;
+            padding: 15px;
+            background: #e8f4f8;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+        code {
+            background: #f1f1f1;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+    
+    <div class="info">
+        <h3>Как работает:</h3>
+        <p>Приложение получает число N из URL после знака <code>?</code></p>
+        <p>Подсчитывает количество простых чисел в диапазоне от 2 до N включительно</p>
+        <p>Результат выводится в заголовок окна браузера</p>
+    </div>
+</body>
+</html>
